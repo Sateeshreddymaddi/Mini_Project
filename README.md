@@ -80,7 +80,7 @@ frontend/
    ```  
 4️⃣ Start the backend server:  
    ```sh
-   npm start
+   nodemon index.js
    ```  
 
 ### **🔹 Frontend Setup**  

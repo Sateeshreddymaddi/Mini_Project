@@ -1,40 +1,38 @@
-## Project Name
+# **📘 Test Management System**  
 
-### Description
+## **🚀 Description**  
 
-This project is a test management system that allows teachers to create multiple-choice questions and other types of exams, students to take exams, and admins to manage the system. It includes authentication, profile management, and performance reporting features.
+A powerful **Test Management System** designed for **teachers, students, and admins** to create, manage, and evaluate exams. It supports multiple-choice and coding questions, automated grading, and detailed performance reporting.  
 
-### Features
+## **✨ Features**  
 
-- User authentication (Admin, Teacher, Student)
-- Multiple-choice and coding question management
-- Automated evaluation of student answers
-- Performance report generation
-- Profile management with cloud storage for profile images
-- Email verification and password reset
+✅ **User Roles:** Admin, Teacher, and Student authentication  
+✅ **Question Management:** Create and manage multiple-choice & coding questions  
+✅ **Automated Evaluation:** Instant grading of student answers  
+✅ **Performance Reports:** Generate detailed student analytics  
+✅ **Cloud Profile Management:** Store profile images securely  
+✅ **Email Services:** Email verification & password reset  
 
-### Technologies Used
+## **🛠️ Technologies Used**  
 
-#### Backend:
+### **Backend**  
+🚀 **Node.js** – Server-side JavaScript runtime  
+⚡ **Express.js** – Web framework for APIs  
+🗄️ **MongoDB Atlas** – Cloud database for scalability  
+📂 **Mongoose** – ODM for MongoDB  
+📦 **Multer** – File upload handling  
+📧 **Mailtrap** – Email services for testing  
 
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
-- Multer (for file uploads)
-- Mailtrap (for email services)
+### **Frontend**  
+⚛️ **React.js** – Fast and modern UI framework  
+⚡ **Vite** – Lightning-fast build tool  
+🎨 **Tailwind CSS** – Utility-first styling framework  
+🗄️ **Zustand** – Simple state management  
+🔍 **ESLint** – Ensuring clean and structured code  
 
-#### Frontend:
+## **📁 Project Structure**  
 
-- React.js
-- Vite
-- Tailwind CSS
-- Zustand (for state management)
-- ESLint (for code quality)
-
-### Project Structure
-
-```
+```plaintext
 .vscode/
 backend/
     controllers/
@@ -54,74 +52,70 @@ frontend/
         styles/
 ```
 
-### Installation
+## **⚙️ Installation Guide**  
 
-#### Backend Setup
+### **🔹 Backend Setup**  
 
-1. Navigate to the `backend/` folder:
+1️⃣ Navigate to the `backend/` folder:  
    ```sh
    cd backend
-   ```
-2. Install dependencies:
+   ```  
+2️⃣ Install dependencies:  
    ```sh
    npm install
-   ```
-3. Create a `.env` file in the `backend/` directory and add the necessary environment variables:
+   ```  
+3️⃣ Create a **`.env`** file and add the following environment variables:  
    ```sh
    touch .env
-   ```
-   `.env` file content:
+   ```  
+   **Example `.env` file:**  
    ```env
    MONGO_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret
-   MAILTRAP_TOKEN="Your Mailtrap token"
-   MAILTRAP_ENDPOINT= https://send.api.mailtrap.io/
-   CLOUDINARY_CLOUD_NAME="Your Cloudinary Cloud name"
-   CLOUDINARY_API_KEY="Cloudinary API Key"
-   CLOUDINARY_API_SECRET="Cloudinary API Key"
-   ```
-4. Start the backend server:
+   MAILTRAP_TOKEN=your_mailtrap_token
+   MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   ```  
+4️⃣ Start the backend server:  
    ```sh
    npm start
-   ```
+   ```  
 
-#### Frontend Setup
+### **🔹 Frontend Setup**  
 
-1. Navigate to the `frontend/` folder:
+1️⃣ Navigate to the `frontend/` folder:  
    ```sh
    cd frontend
-   ```
-2. Install dependencies:
+   ```  
+2️⃣ Install dependencies:  
    ```sh
    npm install
-   ```
-3. Start the development server:
+   ```  
+3️⃣ Start the frontend development server:  
    ```sh
    npm run dev
-   ```
+   ```  
 
-### API Endpoints
+## **📡 API Endpoints**  
 
-#### Authentication
+### **🛂 Authentication**  
+🔹 `POST /api/auth/signup` – Register a new user  
+🔹 `POST /api/auth/login` – Login with credentials  
 
-- `POST /api/auth/signup` - Register a user
-- `POST /api/auth/login` - Login a user
+### **❓ Question Management**  
+🔹 `POST /api/question` – Add a new question  
+🔹 `GET /api/question` – Retrieve all questions  
 
-#### Question Management
+### **📊 Exam Management**  
+🔹 `POST /api/exam/submit` – Submit exam answers  
+🔹 `GET /api/exam/results/:studentId` – Fetch exam results  
 
-- `POST /api/question` - Add a question
-- `GET /api/question` - Fetch all questions
+## **🤝 Contribution**  
 
-#### Exam Management
+Contributions are **welcome**! Feel free to fork this repository and submit a pull request. 🚀  
 
-- `POST /api/exam/submit` - Submit exam answers
-- `GET /api/exam/results/:studentId` - Fetch exam results
+## **📜 License**  
 
-### Contribution
-
-Contributions are welcome! Feel free to fork this repository and submit a pull request.
-
-### License
-
-This project is licensed under the MIT License.
-
+This project is licensed under the **MIT License**.  

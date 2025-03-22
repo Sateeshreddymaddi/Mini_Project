@@ -68,7 +68,7 @@ frontend/
    ```sh
    touch .env
    ```  
-   **Example `.env` file:**  
+   ** Add the mentioned `.env` file:**  
    ```env
    MONGO_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret

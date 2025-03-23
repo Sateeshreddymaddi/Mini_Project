@@ -30,6 +30,7 @@ import ChangePasswordPage from "./pages/ChangePasswordPage";
 import Result from "./pages/Result";
 import AssignMarksPage from "./pages/AssignMarksPage";
 import SubjectDetailedResult from "./pages/SubjectResult";
+import StudentList from "./pages/StudentList";
 import ExamResult from "./pages/CodeResult";
 import TeacherList from "./pages/TeacherList";
 import { useAuthStore } from "./store/authStore";
@@ -94,6 +95,7 @@ function App() {
         <Route path="/add-teacher" element={<ProtectedRoute><AddTeacher /></ProtectedRoute>} />
         <Route path="/Add-Questions" element={<AddQuestionPage />} />
         <Route path="/teachers-list" element={<ProtectedRoute><TeacherList /></ProtectedRoute>} />
+        <Route path="/students-list" element={<ProtectedRoute><StudentList /></ProtectedRoute>} />
 
         {/* Settings Route */}
         <Route path="/:userType/:userId/settings" element={<UserSettingPage />} />

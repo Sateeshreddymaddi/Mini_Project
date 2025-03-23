@@ -141,37 +141,28 @@ export const updateStudent = async (req, res) => {
 
 export const getAllStudents = async (req, res) => {
   try {
-    // Fetch all teachers with details (excluding password)
+    // Fetch all students with details (excluding password)
     const students = await Student.find({}, "-password");
 
-    // Check if each teacher has created exams
-    const formattedTeachers = await Promise.all(
-      students.map(async (teacher) => {
-        // const hasMcqExam = await McqQuestion.exists({ createdBy: teacher._id });
-        // const hasCodingExam = await Question.exists({ createdBy: teacher._id });
+    // Format the student data
+    const formattedStudents = students.map((student) => ({
+      id: student._id,
+      username: student.username,
+      email: student.email,
+      phone: student.phone || null,
+      phoneCountryCode: student.phoneCountryCode || null,
+      age: student.age || null,
+      gender: student.gender || null,
+      profilePhotoUrl: student.profilePhotoUrl || null,
+    }));
 
-        return {
-          id: students._id,
-          username: students.username,
-          email: students.email,
-          phone: students.phone || null,
-          phoneCountryCode: students.phoneCountryCode || null,
-          age: students.age || null,
-          gender: students.gender || null,
-          profilePhotoUrl: students.profilePhotoUrl || null,
-          // hasCreatedExam: hasMcqExam || hasCodingExam, // ✅ FIXED: Check MCQ + Coding Exams
-          // createdAt: teacher.createdAt,
-        };
-      })
-    );
-
-    res.json(formattedStudent);
+    // Send the formatted data as the response
+    res.json(formattedStudents);
   } catch (error) {
     console.error("Error fetching Students:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
-
 export const deleteStudent = async (req, res) => {
   try {
     const studentId = req.params.id;

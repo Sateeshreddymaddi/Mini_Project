@@ -96,21 +96,7 @@ frontend/
 3️⃣ Start the frontend development server:  
    ```sh
    npm run dev
-   ```  
-
-## **📡 API Endpoints**  
-
-### **🛂 Authentication**  
-🔹 `POST /api/auth/signup` – Register a new user  
-🔹 `POST /api/auth/login` – Login with credentials  
-
-### **❓ Question Management**  
-🔹 `POST /api/question` – Add a new question  
-🔹 `GET /api/question` – Retrieve all questions  
-
-### **📊 Exam Management**  
-🔹 `POST /api/exam/submit` – Submit exam answers  
-🔹 `GET /api/exam/results/:studentId` – Fetch exam results  
+   ```   
 
 ## **🤝 Contribution**  
 

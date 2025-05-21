@@ -12,8 +12,8 @@ const DashboardPage = () => {
 
   const handleLogout = () => {
     logout();
+    navigate("*");
   };
-
   const data = [
     { title: "Total Students", icon: <UserPlus size={40} />, color: "teal-500", path: "#", value: "120" },
     { title: "Total Teachers", icon: <UserPlus size={40} />, color: "blue-500", path: "#", value: "15" },

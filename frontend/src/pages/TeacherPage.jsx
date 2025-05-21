@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ClipboardList, FilePlus, CheckSquare, Menu, LogOut, Code} from "lucide-react";
 import { motion } from "framer-motion";
+import { formatDate } from "../utils/date";
 
 export default function TeacherPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -159,7 +160,7 @@ export default function TeacherPage() {
                 Welcome, {teacherName}!
               </h1>
               <p className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-                Manage exams, evaluations, and student grades from the sidebar.
+                Manage exams, evaluations, and student grades from the sidebar {formatDate(new Date())}.
               </p>
             </motion.div>
             {/* Additional teacher-specific dashboard cards can be added here */}

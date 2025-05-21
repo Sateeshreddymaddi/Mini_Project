@@ -6,10 +6,12 @@ import { Link } from "react-router-dom"; // Import Link for navigation
 const Page = () => {
   const { user, logout } = useAuthStore();
 
-  const handleLogout = () => {
-    logout();
-  };
 
+const handleLogout = () => {
+    logout();
+    localStorage.clear();
+    navigate("/");
+  };
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}

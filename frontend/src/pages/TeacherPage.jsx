@@ -58,7 +58,7 @@ export default function TeacherPage() {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/teacher-login");
+    navigate("/");
   };
 
   const menuItems = [

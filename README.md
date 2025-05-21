@@ -78,10 +78,6 @@ frontend/
    CLOUDINARY_API_KEY=your_cloudinary_api_key
    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
    ```  
-4️⃣ Start the backend server:  
-   ```sh
-   nodemon index.js
-   ```  
 
 ### **🔹 Frontend Setup**  
 
@@ -98,6 +94,16 @@ frontend/
    npm run dev
    ```   
 
+### **🔹 Starting the server **
+
+1️⃣ Navigate to the `main/` folder:
+   ```sh
+   cd ..
+   ```
+2️⃣Start the both frontend and backend development server:  
+   ```sh
+   npm run dev
+   ```   
 ## **🤝 Contribution**  
 
 Contributions are **welcome**! Feel free to fork this repository and submit a pull request. 🚀  

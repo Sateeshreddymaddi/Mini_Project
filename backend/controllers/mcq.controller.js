@@ -1,51 +1,47 @@
 import McqQuestion from "../models/McqQuestion.js";
 import McqSubmission from "../models/McqSubmission.js";
+import ExamSettings from "../models/ExamSettings.js";
 import mongoose from "mongoose";
 
 /** 
- * @desc Add new MCQ(s)
+ * @desc Add new MCQ(s) and set exam duration
  * @route POST /api/mcq/add
  */
 export const addMcqQuestion = async (req, res) => {
   try {
-    const data = req.body;
-    if (Array.isArray(data)) {
-      for (const q of data) {
-        if (
-          !q.question_text ||
-          !q.options ||
-          !q.correct_option ||
-          !q.created_by ||
-          !q.subjectName ||
-          q.marks == null
-        ) {
-          return res.status(400).json({ message: "All fields (including marks) are required." });
-        }
-        if (!mongoose.Types.ObjectId.isValid(q.created_by)) {
-          return res.status(400).json({ message: "Invalid teacher ID" });
-        }
-      }
-      const questions = await McqQuestion.insertMany(data);
-      return res.status(201).json({ message: "MCQs added successfully", questions });
-    } else {
-      const { question_text, options, marks, correct_option, created_by, subjectName } = data;
-      if (!question_text || !options || !correct_option || !created_by || !subjectName || marks == null) {
+    const { questions, examDuration } = req.body;
+    if (!Array.isArray(questions) || questions.length === 0) {
+      return res.status(400).json({ message: "Questions must be an array with at least one question." });
+    }
+    if (!examDuration || isNaN(examDuration) || examDuration <= 0) {
+      return res.status(400).json({ message: "A valid exam duration (positive number in minutes) is required." });
+    }
+    const subjectName = questions[0].subjectName;
+    for (const q of questions) {
+      if (
+        !q.question_text ||
+        !q.options ||
+        !q.correct_option ||
+        !q.created_by ||
+        !q.subjectName ||
+        q.marks == null
+      ) {
         return res.status(400).json({ message: "All fields (including marks) are required." });
       }
-      if (!mongoose.Types.ObjectId.isValid(created_by)) {
+      if (q.subjectName !== subjectName) {
+        return res.status(400).json({ message: "All questions must have the same subjectName." });
+      }
+      if (!mongoose.Types.ObjectId.isValid(q.created_by)) {
         return res.status(400).json({ message: "Invalid teacher ID" });
       }
-      const newQuestion = new McqQuestion({
-        question_text,
-        options,
-        correct_option,
-        marks,
-        created_by,
-        subjectName,
-      });
-      await newQuestion.save();
-      return res.status(201).json({ message: "MCQ added successfully", question: newQuestion });
     }
+    const insertedQuestions = await McqQuestion.insertMany(questions);
+    await ExamSettings.findOneAndUpdate(
+      { subjectName },
+      { examDuration },
+      { upsert: true }
+    );
+    return res.status(201).json({ message: "MCQs added successfully", questions: insertedQuestions });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
@@ -72,16 +68,45 @@ export const getMcqQuestions = async (req, res) => {
 };
 
 /** 
+ * @desc Get exam settings for a subject
+ * @route GET /api/mcq/exam-settings/:subjectName
+ */
+export const getExamSettings = async (req, res) => {
+  try {
+    const { subjectName } = req.params;
+    const settings = await ExamSettings.findOne({ subjectName });
+    if (!settings) {
+      return res.status(404).json({ message: "Exam settings not found for this subject." });
+    }
+    res.status(200).json({ examDuration: settings.examDuration });
+  } catch (error) {
+    console.error("Error fetching exam settings:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+/** 
  * @desc Submit an MCQ answer and auto-evaluate 
  * @route POST /api/mcq/:studentId/submit-answers
  */
 export const submitMcqAnswer = async (req, res) => {
   try {
-    console.log("Submit MCQ Answer request body:", req.body);
+    // console.log("Submit MCQ Answer request body:", req.body);
     const { studentId } = req.params;
     const { question_id, selected_option } = req.body;
     if (!studentId || !question_id || !selected_option) {
       return res.status(400).json({ message: "Missing required fields" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(studentId) || !mongoose.Types.ObjectId.isValid(question_id)) {
+      return res.status(400).json({ message: "Invalid studentId or questionId" });
+    }
+    // Check for existing submission
+    const existingSubmission = await McqSubmission.findOne({
+      user_id: studentId,
+      question_id,
+    });
+    if (existingSubmission) {
+      return res.status(400).json({ message: "Answer already submitted for this question" });
     }
     const question = await McqQuestion.findById(question_id);
     if (!question) {
@@ -99,7 +124,6 @@ export const submitMcqAnswer = async (req, res) => {
       marks_earned: earnedMarks,
     });
     await submission.save();
-    // console.log("MCQ submission saved:", submission);
     return res.status(201).json({
       message: "Answer submitted successfully",
       submission,
@@ -114,7 +138,6 @@ export const submitMcqAnswer = async (req, res) => {
 
 /** 
  * @desc Get subject-wise performance report for a student 
- *         (groups submissions by subject name and calculates marks)
  * @route GET /api/mcq/subject-report/:studentId
  */
 export const getSubjectWiseReport = async (req, res) => {
@@ -212,9 +235,7 @@ export const getAvailableSubjects = async (req, res) => {
 };
 
 /**
- * @desc Get exam history for a student.
- * Aggregates all MCQ submissions for a student, optionally filtered by subject.
- * Computes score percentage and returns the latest submission date.
+ * @desc Get exam history for a student
  * @route GET /api/mcq/:studentId/exam-history?subjectName=optional
  */
 export const getExamHistory = async (req, res) => {
@@ -269,13 +290,12 @@ export const getExamHistory = async (req, res) => {
 };
 
 /**
- * @desc Get detailed result for a given subject for a student.
+ * @desc Get detailed result for a given subject for a student
  * @route GET /api/mcq/detailed-result/:studentId/:subjectName
  */
 export const getDetailedSubjectResult = async (req, res) => {
   try {
     const { studentId, subjectName } = req.params;
-    // console.log("Fetching detailed results for studentId:", studentId, "subjectName:", subjectName);
     if (!mongoose.Types.ObjectId.isValid(studentId)) {
       return res.status(400).json({ message: "Invalid studentId. Please use a valid MongoDB ObjectId." });
     }
@@ -285,7 +305,6 @@ export const getDetailedSubjectResult = async (req, res) => {
       user_id: studentObjectId,
       subjectName: { $regex: trimmedSubjectName, $options: "i" }
     }).populate("question_id");
-    // console.log("Submissions found:", submissions);
     if (!submissions || submissions.length === 0) {
       return res.status(404).json({ message: "No submissions found for this subject." });
     }

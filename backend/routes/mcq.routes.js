@@ -7,7 +7,8 @@ import {
   getMcqReport,
   getAvailableSubjects,
   getDetailedSubjectResult,
-  getExamHistory
+  getExamHistory,
+  getExamSettings
 } from "../controllers/mcq.controller.js";
 
 const router = express.Router();
@@ -20,5 +21,6 @@ router.get("/report/:user_id", getMcqReport);
 router.get("/available-subjects", getAvailableSubjects);
 router.get("/detailed-result/:studentId/:subjectName", getDetailedSubjectResult);
 router.get("/:studentId/exam-history", getExamHistory);
+router.get("/exam-settings/:subjectName", getExamSettings);
 
 export default router;

@@ -1,59 +1,99 @@
 // import express from "express";
-// import { AddQuestion } from "../controllers/auth.controller.js";
-// import { Question } from "../models/Question.js";
+// import {
+//   addQuestion,
+//   getQuestions,
+//   getExamSettings,
+//   submitExamCode,
+//   runExamCode,
+//   getStudentSubmissions,
+//   assignMarks,
+//   getStudentsWithSubmissions,
+//   getExamResult,
+// } from "../controllers/question.controller.js";
+// import ExamSettings from "../models/ExamSettings.js";
 
 // const router = express.Router();
 
-// // GET /api/questions - Retrieve all questions
-// router.get("/", async (req, res) => {
+
+// router.post("/add",  addQuestion);
+// router.get("/",  getQuestions);
+// router.get("/exam-settings/:subjectName",  getExamSettings);
+// router.post("/exam/submit",  submitExamCode);
+// router.post("/exam/run",  runExamCode);
+// router.get("/submissions/:studentId", getStudentSubmissions);
+// router.post("/assign-marks", assignMarks);
+// router.get("/students-with-submissions", getStudentsWithSubmissions);
+// router.get("/exam-result/:studentId", getExamResult);
+
+// // Test endpoint for ExamSettings
+// router.post("/test-exam-settings",  async (req, res) => {
 //   try {
-//     const questions = await Question.find({});
-//     res.status(200).json({ questions });
+//     const { subjectName, examDuration } = req.body;
+//     // console.log("Test endpoint received:", { subjectName, examDuration }); // Debug log
+//     if (!subjectName || !examDuration || isNaN(examDuration) || examDuration <= 0) {
+//       return res.status(400).json({ message: "subjectName and a valid examDuration (positive number) are required." });
+//     }
+//     const settings = await ExamSettings.findOneAndUpdate(
+//       { subjectName },
+//       { examDuration },
+//       { upsert: true, new: true }
+//     );
+//     // console.log("Test endpoint result:", settings); // Debug log
+//     res.status(200).json(settings);
 //   } catch (error) {
-//     res.status(500).json({ message: "Internal server error" });
+//     console.error("Error in test-exam-settings:", error);
+//     res.status(500).json({ message: "Internal Server Error", error: error.message });
 //   }
 // });
 
-// // POST /api/questions/add - Add questions
-// router.post("/add", AddQuestion);
-
 // export default router;
 
+
 import express from "express";
-import { addQuestion, getQuestions } from "../controllers/question.controller.js";
-import { Question } from "../models/Question.js";
+import {
+  addQuestion,
+  getQuestions,
+  getExamSettings,
+  submitExamCode,
+  runExamCode,
+  runAndTestCode, // New function for automated testing
+  getStudentSubmissions,
+  assignMarks,
+  getStudentsWithSubmissions,
+  getExamResult,
+} from "../controllers/question.controller.js";
+import ExamSettings from "../models/ExamSettings.js";
 
 const router = express.Router();
 
-// Dummy authentication middleware for testing purposes only.
-// Replace this with your actual authentication middleware.
-const dummyAuth = (req, res, next) => {
-  req.user = { role: "teacher", id: "60d0fe4f5311236168a109ca" };
-  next();
-};
+router.post("/add", addQuestion);
+router.get("/", getQuestions);
+router.get("/exam-settings/:subjectName", getExamSettings);
+router.post("/exam/submit", submitExamCode);
+router.post("/exam/run", runExamCode);
+router.post("/exam/test", runAndTestCode); // New endpoint for testing against test cases
+router.get("/submissions/:studentId", getStudentSubmissions);
+router.post("/assign-marks", assignMarks);
+router.get("/students-with-submissions", getStudentsWithSubmissions);
+router.get("/exam-result/:studentId", getExamResult);
 
-router.use(dummyAuth);
-
-// Middleware to check if the user is admin or teacher.
-const isAdminOrTeacher = (req, res, next) => {
-  if (req.user && (req.user.role === "admin" || req.user.role === "teacher")) {
-    return next();
-  } else {
-    return res.status(403).json({ message: "Access denied. Only admin or teacher can add questions." });
-  }
-};
-
-// GET /api/questions - Retrieve all questions
-router.get("/", async (req, res) => {
+// Test endpoint for ExamSettings
+router.post("/test-exam-settings", async (req, res) => {
   try {
-    const questions = await Question.find({});
-    res.status(200).json({ questions });
+    const { subjectName, examDuration } = req.body;
+    if (!subjectName || !examDuration || isNaN(examDuration) || examDuration <= 0) {
+      return res.status(400).json({ message: "subjectName and a valid examDuration (positive number) are required." });
+    }
+    const settings = await ExamSettings.findOneAndUpdate(
+      { subjectName },
+      { examDuration },
+      { upsert: true, new: true }
+    );
+    res.status(200).json(settings);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error in test-exam-settings:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-
-// POST /api/questions/add - Add questions (only accessible to admin and teacher)
-router.post("/add", isAdminOrTeacher, addQuestion);
 
 export default router;

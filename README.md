@@ -88,11 +88,7 @@ frontend/
 2️⃣ Install dependencies:  
    ```sh
    npm install
-   ```  
-3️⃣ Start the frontend development server:  
-   ```sh
-   npm run dev
-   ```   
+   ```    
 
 ### **🔹 Starting the server **
 

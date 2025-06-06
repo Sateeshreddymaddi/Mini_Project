@@ -4,7 +4,8 @@ import { submitExamCode,
         getStudentSubmissions,
         assignMarks,
         getStudentsWithSubmissions,
-        getExamResult
+        getExamResult,
+        getCodingSubjects
 } from "../controllers/exam.controller.js";
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get("/:studentId/submissions", getStudentSubmissions);
 router.get("/students-with-submissions", getStudentsWithSubmissions); 
 router.put("/assign-marks", assignMarks);
 router.get("/result/:studentId", getExamResult);
+router.get("/coding-subjects", getCodingSubjects);
 
 export default router;

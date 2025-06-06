@@ -33,6 +33,7 @@ import SubjectDetailedResult from "./pages/SubjectResult";
 import StudentList from "./pages/StudentList";
 import ExamResult from "./pages/CodeResult";
 import TeacherList from "./pages/TeacherList";
+import Leaderboard from "./pages/Leaderboard";
 import { useAuthStore } from "./store/authStore";
 
 const ProtectedRoute = ({ children }) => {
@@ -100,6 +101,8 @@ function App() {
         {/* Settings Route */}
         <Route path="/:userType/:userId/settings" element={<UserSettingPage />} />
 
+        {/* LeaderBoard */}
+        <Route path="/leaderboard" element={<Leaderboard/>} />
         {/* General Routes */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

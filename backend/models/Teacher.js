@@ -1,15 +1,3 @@
-// import mongoose from "mongoose";
-
-// const TeacherSchema = new mongoose.Schema({
-//     username: { type: String, required: true, unique: true },
-//     password: { type: String, required: true },
-//     email: { type: String, unique: true, sparse: true }, // ✅ Allow null values without uniqueness conflict
-// });
-
-// export default mongoose.model("Teacher", TeacherSchema);
-
-
-
 import mongoose from "mongoose";
 
 const TeacherSchema = new mongoose.Schema({

@@ -67,7 +67,6 @@ export default function TeacherPage() {
     { name: "Add MCQ's Exam", icon: <FilePlus size={20} />, path: `/teacher/${teacherId}/add-multi-choice` },
     { name: "Add Coding Questions", icon: <Code size={20} />, path: "/Add-Questions" },
     { name: "Add MCQ & Coding", icon: <FilePlus size={20} />, path: `/${teacherId}/add-mcq-coding-question` },
-    { name: "Assign Grades", icon: <CheckSquare size={20} />, path: "/assign-marks" },
     { name: "Settings", icon: <ClipboardList size={20} />, path: `/teacher/${teacherId}/settings` },
   ];
 

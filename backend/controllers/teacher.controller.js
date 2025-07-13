@@ -7,47 +7,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Add Teacher(s) (with password hashing)
-// export const addTeacher = async (req, res) => {
-//   try {
-//     const { teachers } = req.body; // Expecting an array of teachers
-
-//     if (!Array.isArray(teachers) || teachers.length === 0) {
-//       return res.status(400).json({ message: "Invalid data. Provide an array of teachers." });
-//     }
-
-//     const usernames = teachers.map((t) => t.username);
-//     const existingTeachers = await Teacher.find({ username: { $in: usernames } });
-
-//     // Filter out usernames that already exist
-//     const existingUsernames = new Set(existingTeachers.map((t) => t.username));
-//     const newTeachers = teachers.filter((t) => !existingUsernames.has(t.username));
-
-//     if (newTeachers.length === 0) {
-//       return res.status(400).json({ message: "All usernames already exist!" });
-//     }
-
-//     // Hash passwords for new teachers
-//     const hashedTeachers = await Promise.all(
-//       newTeachers.map(async (t) => ({
-//         username: t.username,
-//         password: await bcrypt.hash(t.password, 10),
-//       }))
-//     );
-
-//     // Insert all new teachers
-//     await Teacher.insertMany(hashedTeachers);
-
-//     res.status(201).json({
-//       message: `Successfully added ${hashedTeachers.length} teacher(s).`,
-//       failedUsernames: [...existingUsernames],
-//     });
-//   } catch (error) {
-//     console.error("Error adding teachers:", error);
-//     res.status(500).json({ message: "Internal Server Error", error: error.message });
-//   }
-// };
-
 export const addTeacher = async (req, res) => {
   try {
     const { teachers } = req.body; // Expecting an array

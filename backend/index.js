@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { connectDB } from "./db/connectDB.js"; // Ensure you have this file configured for MongoDB Atlas
+import { connectDB } from "./db/connectDB.js"; 
 import authRoutes from "./routes/auth.route.js";
 import questionRoutes from "./routes/question.route.js";
 import examRoutes from "./routes/exam.route.js";
@@ -25,8 +25,6 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-// If needed, serve local files (for debugging)
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);

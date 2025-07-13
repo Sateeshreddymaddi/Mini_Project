@@ -4,9 +4,7 @@ import McqCodingSubmission from '../models/mcqcodingSubmission.js';
 export async function addQuestions(req, res) {
   try {
     const question = req.body; // Expecting a single question object instead of an array
-    console.log('Received request body:', question); // Log incoming data
 
-    // No need to check if it's an array since we expect a single object
     if (!question || typeof question !== 'object' || Object.keys(question).length === 0) {
       console.log('Validation failed: Invalid question object');
       return res.status(400).json({ message: 'Valid question object is required' });
@@ -48,17 +46,14 @@ async function executeCode(code, language, input) {
   return "Sample Output"; // Placeholder output
 }
 
-// Unified submission function
 export async function submitQuestion(req, res) {
   try {
     const { studentId, questionId, selectedOption, code, language } = req.body;
 
-    // Validate required fields
     if (!studentId || !questionId) {
       return res.status(400).json({ message: 'Missing required fields: studentId and questionId are required' });
     }
 
-    // Fetch the question to determine its type
     const question = await McqCodingQuestion.findById(questionId);
     if (!question) {
       return res.status(404).json({ message: 'Question not found' });
@@ -82,7 +77,7 @@ export async function submitQuestion(req, res) {
       gainedMarks = isCorrect ? question.marks : 0;
       submissionData.selectedOption = selectedOption;
     }
-    // Handle coding submission
+
     else if (question.type === 'coding') {
       if (!code || !language) {
         return res.status(400).json({ message: 'Code and language are required for coding questions' });
@@ -90,7 +85,6 @@ export async function submitQuestion(req, res) {
       const testCaseResults = [];
       let passedCount = 0;
 
-      // Evaluate code against each test case
       for (const testCase of question.testCases) {
         const actualOutput = await executeCode(code, language, testCase.input);
         const passed = actualOutput.trim() === testCase.output.trim();
@@ -103,7 +97,6 @@ export async function submitQuestion(req, res) {
         });
       }
 
-      // Calculate marks based on passed test cases
       gainedMarks = (passedCount / question.testCases.length) * question.marks;
       submissionData.code = code;
       submissionData.language = language;
@@ -112,11 +105,9 @@ export async function submitQuestion(req, res) {
 
     submissionData.gainedMarks = gainedMarks;
 
-    // Save the submission to the database
     const submission = new McqCodingSubmission(submissionData);
     await submission.save();
 
-    // Send response
     res.status(201).json({
       message: 'Submission successful',
       gainedMarks,

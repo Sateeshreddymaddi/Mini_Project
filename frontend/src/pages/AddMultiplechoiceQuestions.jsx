@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Select, { components } from "react-select";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom"; // 👈 Add this
 
 const marksOptions = [
   { value: 1, label: "1 Mark" },
@@ -38,44 +39,45 @@ const DropdownIndicator = (props) => {
 
 const AddMultichoiceQuestions = () => {
   const [subjectName, setSubjectName] = useState("");
-  const [examDuration, setExamDuration] = useState(""); // Add exam duration state
+  const [examDuration, setExamDuration] = useState("");
   const [questions, setQuestions] = useState([
     { id: 1, text: "", marks: "", options: ["", "", "", ""], correctAnswer: "" },
   ]);
 
+  const navigate = useNavigate(); 
   const handleSubjectNameChange = (e) => setSubjectName(e.target.value);
-  const handleExamDurationChange = (e) => setExamDuration(e.target.value); // Add handler for exam duration
-  
+  const handleExamDurationChange = (e) => setExamDuration(e.target.value);
+
   const handleQuestionChange = (index, value) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index].text = value;
     setQuestions(updatedQuestions);
   };
-  
+
   const handleMarksChange = (index, selectedOption) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index].marks = selectedOption.value;
     setQuestions(updatedQuestions);
   };
-  
+
   const handleOptionChange = (qIndex, oIndex, value) => {
     const updatedQuestions = [...questions];
     updatedQuestions[qIndex].options[oIndex] = value;
     setQuestions(updatedQuestions);
   };
-  
+
   const handleCorrectAnswerChange = (qIndex, value) => {
     const updatedQuestions = [...questions];
     updatedQuestions[qIndex].correctAnswer = value;
     setQuestions(updatedQuestions);
   };
-  
+
   const addQuestion = () =>
     setQuestions([
       ...questions,
       { id: questions.length + 1, text: "", marks: "", options: ["", "", "", ""], correctAnswer: "" },
     ]);
-    
+
   const deleteLastQuestion = () => {
     if (questions.length === 1) {
       alert("At least one question is required.");
@@ -83,19 +85,18 @@ const AddMultichoiceQuestions = () => {
     }
     setQuestions(questions.slice(0, -1));
   };
-  
+
   const validateQuestions = () => {
     if (!subjectName.trim()) {
       alert("Please enter the subject name.");
       return false;
     }
-    
-    // Validate exam duration
+
     if (!examDuration || isNaN(examDuration) || Number(examDuration) <= 0) {
       alert("Please enter a valid exam duration (positive number in minutes).");
       return false;
     }
-    
+
     for (let i = 0; i < questions.length; i++) {
       const q = questions[i];
       if (!q.text.trim()) {
@@ -119,17 +120,17 @@ const AddMultichoiceQuestions = () => {
     }
     return true;
   };
-  
+
   const handleSave = async () => {
     if (!validateQuestions()) return;
-    
+
     try {
       const teacherId = localStorage.getItem("teacher_id");
       if (!teacherId) {
         alert("Error: Teacher ID not found. Please log in again.");
         return;
       }
-      
+
       const formattedQuestions = questions.map((q) => ({
         question_text: q.text,
         marks: q.marks,
@@ -138,24 +139,24 @@ const AddMultichoiceQuestions = () => {
         created_by: teacherId,
         subjectName: subjectName,
       }));
-      
-      // Format the request body to match backend expectations
+
       const requestBody = {
         questions: formattedQuestions,
         examDuration: Number(examDuration)
       };
-      
-      console.log("Sending Data:", requestBody);
-      
-      // Use the correct endpoint
+
       const response = await axios.post("http://localhost:5001/api/mcq/add", requestBody, {
         headers: { "Content-Type": "application/json" },
       });
-      
+
       alert(response.data.message);
+
       setSubjectName("");
-      setExamDuration(""); // Reset exam duration
+      setExamDuration("");
       setQuestions([{ id: 1, text: "", marks: "", options: ["", "", "", ""], correctAnswer: "" }]);
+
+      navigate(`/teacher/${teacherId}`); 
+
     } catch (error) {
       console.error("Error response:", error.response);
       alert(`Failed to save questions. Error: ${error.response?.data?.message || error.message}`);
@@ -179,7 +180,7 @@ const AddMultichoiceQuestions = () => {
           >
             Add Multiple Choice Questions
           </motion.h2>
-          
+
           <div className="mb-6">
             <input
               type="text"
@@ -188,8 +189,7 @@ const AddMultichoiceQuestions = () => {
               placeholder="Enter subject name for all questions"
               className="w-full p-3 border rounded mb-4 bg-gray-700 text-white placeholder-gray-400"
             />
-            
-            {/* Add exam duration input */}
+
             <input
               type="number"
               value={examDuration}
@@ -199,7 +199,7 @@ const AddMultichoiceQuestions = () => {
               className="w-full p-3 border rounded mb-4 bg-gray-700 text-white placeholder-gray-400"
             />
           </div>
-          
+
           {questions.map((q, qIndex) => (
             <motion.div
               key={q.id}
@@ -253,7 +253,7 @@ const AddMultichoiceQuestions = () => {
               </select>
             </motion.div>
           ))}
-          
+
           <div className="flex justify-between space-x-2">
             <motion.button
               whileHover={{ scale: 1.05 }}

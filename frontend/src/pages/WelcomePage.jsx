@@ -24,7 +24,6 @@ const WelcomePage = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // Three.js setup (unchanged)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -194,7 +193,7 @@ const WelcomePage = () => {
       <nav className="fixed top-0 w-full bg-black/30 backdrop-blur-md z-50">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-blue-400">ExamPortal Pro</h1>
+            <h1 className="text-2xl font-bold text-blue-400">Test Hub-Online Examination Portal</h1>
             <div className="hidden md:flex space-x-8">
               <button
                 onClick={() => scrollToSection("home")}
@@ -461,7 +460,7 @@ const WelcomePage = () => {
                   </div>
                   <div>
                     <div className="font-semibold">Phone</div>
-                    <div className="text-gray-300">+91 9876543211</div>
+                    <div className="text-gray-300">+91 98xxxxxxxx4</div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -529,7 +528,7 @@ const WelcomePage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-lg font-bold mb-4 text-blue-400">ExamPortal Pro</h3>
+              <h3 className="text-lg font-bold mb-4 text-blue-400">Test Hub- online Examination Portal</h3>
               <p className="text-gray-400 text-sm">
                 Leading digital examination platform for educational institutions and
                 corporations.
@@ -565,7 +564,7 @@ const WelcomePage = () => {
           </div>
           <div className="border-t border-gray-700 pt-6 text-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} ExamPortal Pro. All rights reserved.
+              © 2025 - {new Date().getFullYear()} Test Hub. All rights reserved.
             </p>
           </div>
         </div>
